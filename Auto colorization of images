@@ -90,7 +90,7 @@ model.summary()
 
 model.compile(optimizer='adam',metrics=['acc'],loss='mse',run_eagerly=True)
 
-his =model.fit(X_train,y_train,epochs=30,batch_size=32,steps_per_epoch=X_train.shape[0]//32,verbose=1)
+his =model.fit(X_train,y_train,epochs=700,batch_size=32,steps_per_epoch=X_train.shape[0]//32,verbose=1)
 
 model.save('./bestmodel1.h5')
 
