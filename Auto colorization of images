@@ -94,24 +94,54 @@ his =model.fit(X_train,y_train,epochs=700,batch_size=32,steps_per_epoch=X_train.
 
 model.save('./bestmodel1.h5')
 
+##streamlit
+
+%%writefile app.py
+import streamlit as st
+import numpy as np
+import cv2
+import pandas as pd
+import matplotlib.pyplot as plt
+from skimage.color import rgb2lab, lab2rgb   #to convert the image into lab or rgb type
+from skimage.io import imread,imshow   #to read images and display it
+from keras.preprocessing.image import ImageDataGenerator #Generate batches of tensor image data with real-time data augmentation.
+from keras.utils import img_to_array #converts a image into numpy array
+from keras.utils import load_img,save_img #load the image frrom array
+from keras.layers import Conv2D, MaxPool2D,UpSampling2D,Input, LeakyReLU #encoder layers
+from keras.models import load_model
+import shutil #helps move files from one folder to another
+import os #helps with the path
+
+
+st.title("Auto colorization of Images")
 img1_color= []
-path= "dog.jpg"
-img=img_to_array(
-     load_img(path,target_size=(256,256,3)))/255
-plt.title("input image")
-imshow(img)
-plt.axis("off")
-plt.show()
+path= st.file_uploader("Upload An Image", type=["png","jpg","jpeg"])
+if st.button("upload"):
+  st.text("Input Image")
+  st.image(path)
+  model=load_model("model7.h5")
+  img=img_to_array(
+      load_img(path,target_size=(256,256,3)))/255
+  plt.title("input image")
+  imshow(img)
+  plt.axis("off")
+  plt.show()
 
-img1_color.append(img)
-img1_color= rgb2lab(img1_color)[:,:,:,0]
-img1_color = img1_color.reshape(img1_color.shape+(1,))
+  img1_color.append(img)
+  img1_color= rgb2lab(img1_color)[:,:,:,0]
+  img1_color = img1_color.reshape(img1_color.shape+(1,))
 
-output1 = model.predict(img1_color)
-output1 = output1*128
+  output1 = model.predict(img1_color)
+  output1 = output1*128
 
-result= np.zeros((256,256,3))
-result[:,:,0] = img1_color[0][:,:,0]
-result[:,:,1:] = output1[0]
+  result= np.zeros((256,256,3))
+  result[:,:,0] = img1_color[0][:,:,0]
+  result[:,:,1:] = output1[0]
+  img1=lab2rgb(result)
+  st.text("Output Image")
+  plt.title("output image")
+  imshow(img)
+  st.image(img1)
 
-imshow(lab2rgb(result))
+
+! streamlit run app.py & npx localtunnel --port 8501
