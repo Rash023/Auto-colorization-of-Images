@@ -94,7 +94,7 @@ his =model.fit(X_train,y_train,epochs=700,batch_size=32,steps_per_epoch=X_train.
 
 model.save('./bestmodel1.h5')
 
-##streamlit
+#streamlit
 
 %%writefile app.py
 import streamlit as st
