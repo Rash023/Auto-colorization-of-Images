@@ -48,6 +48,9 @@ t_img[:10].shape
 X=[]
 y=[]
 
+#converting the images from rgb to lab and then appending them into two seperate numpy arrays
+
+
 for img in t_img:
     try:
         lab =rgb2lab(img)
@@ -119,6 +122,10 @@ path= st.file_uploader("Upload An Image", type=["png","jpg","jpeg"])
 if st.button("upload"):
   st.text("Input Image")
   st.image(path)
+
+
+  #loading the model
+  
   model=load_model("model7.h5")
   img=img_to_array(
       load_img(path,target_size=(256,256,3)))/255
@@ -128,15 +135,23 @@ if st.button("upload"):
   plt.show()
 
   img1_color.append(img)
+  
+  #converting the image from rgb to lab
+  
   img1_color= rgb2lab(img1_color)[:,:,:,0]
   img1_color = img1_color.reshape(img1_color.shape+(1,))
-
+    
+  #model prediction of the input
+  
   output1 = model.predict(img1_color)
   output1 = output1*128
 
   result= np.zeros((256,256,3))
   result[:,:,0] = img1_color[0][:,:,0]
   result[:,:,1:] = output1[0]
+  
+  #converting the result from lab to rgb
+  
   img1=lab2rgb(result)
   st.text("Output Image")
   plt.title("output image")
