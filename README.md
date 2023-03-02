@@ -1,2 +1,2 @@
-# ML
-Machine learning projects
+# Auto colorization of images
+Machine learning project
