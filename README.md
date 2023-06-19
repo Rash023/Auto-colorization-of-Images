@@ -1,2 +1,2 @@
 # Auto colorization of images
-Machine learning project
+Colorisation of images using Deep Nueral Networks.
